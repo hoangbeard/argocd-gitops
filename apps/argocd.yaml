@@ -1,0 +1,25 @@
+# Argo CD manages itself from bootstrap/.
+# Edit bootstrap/, commit, push: Argo CD applies the change to itself.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
+spec:
+  project: platform
+  source:
+    repoURL: https://github.com/hoangbeard/argocd-gitops.git
+    targetRevision: main
+    path: bootstrap
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      # Never auto-delete parts of Argo CD. Remove things by hand if needed.
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true

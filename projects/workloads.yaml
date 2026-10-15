@@ -1,0 +1,18 @@
+# Applications run by product teams.
+# They can only deploy to namespaces that start with "app-",
+# and can only create Namespaces at cluster level.
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: workloads
+  namespace: argocd
+spec:
+  description: Team applications
+  sourceRepos:
+    - https://github.com/hoangbeard/argocd-gitops.git
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: "app-*"
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace

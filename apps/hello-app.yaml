@@ -1,0 +1,29 @@
+# Example application. Copy this file and workloads/hello-app/ to add your own.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hello-app
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: workloads
+  source:
+    repoURL: https://github.com/hoangbeard/argocd-gitops.git
+    targetRevision: main
+    path: workloads/hello-app
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: app-hello
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    # Labels for the namespace Argo CD creates.
+    # "restricted" makes Kubernetes reject pods that are not locked down.
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: restricted
+        pod-security.kubernetes.io/warn: restricted

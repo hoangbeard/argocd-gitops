@@ -1,0 +1,28 @@
+# hello-app: a small web app (podinfo) deployed the GitOps way.
+# Change something here, commit, push, and watch Argo CD roll it out.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: app-hello
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: hello-app
+      app.kubernetes.io/part-of: argocd-gitops
+    includeSelectors: true
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  # After you seal a secret for your cluster (see README), add it here:
+  # - sealed-secret.yaml
+
+configMapGenerator:
+  - name: hello-app-config
+    literals:
+      - PODINFO_UI_MESSAGE=Hello from Git! Deployed by Argo CD.
+      - PODINFO_UI_COLOR=#34577c
+
+images:
+  - name: ghcr.io/stefanprodan/podinfo
+    newTag: 6.15.0

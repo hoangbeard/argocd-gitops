@@ -1,0 +1,14 @@
+# Main Argo CD settings.
+# Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/argocd-cm-yaml/
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+data:
+  # URL used for UI redirects. Matches `make ui` (port-forward).
+  url: http://localhost:8080
+  # How often Argo CD checks Git for changes.
+  timeout.reconciliation: 60s
+  # The local admin account is fine for a lab.
+  # In production, turn it off and use SSO instead: admin.enabled: "false"
+  admin.enabled: "true"

@@ -1,0 +1,9 @@
+# Serve the UI over plain HTTP.
+# Only for local use with port-forward. In production, keep TLS on,
+# or terminate TLS at your ingress or load balancer.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cmd-params-cm
+data:
+  server.insecure: "true"

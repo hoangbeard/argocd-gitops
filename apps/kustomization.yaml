@@ -1,0 +1,11 @@
+# App-of-Apps: every Application listed here is created by the root app.
+# To add an app, add a file and list it below.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: argocd
+
+resources:
+  - argocd.yaml
+  - sealed-secrets.yaml
+  - hello-app.yaml
